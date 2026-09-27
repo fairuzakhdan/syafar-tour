@@ -14,7 +14,6 @@ export interface HotelResultItem {
   rooms: number;
   nights: number;
   baseSAR: number;
-  taxSAR: number;
   totalSAR: number;
   perPaxSAR: number;
 }

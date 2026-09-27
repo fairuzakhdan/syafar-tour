@@ -10,12 +10,16 @@ interface Row {
   /** null = komponen tidak dibayar dalam SAR (misal tiket). */
   sar: number | null;
   idr: number;
+  /** Subtotal SAR → IDR, ditampilkan sebagai pemisah sebelum biaya IDR. */
+  subtotal?: boolean;
 }
 
 const HEAD_CELL = "pb-1 text-left text-xs font-medium uppercase tracking-wide text-slate-400";
 const HEAD_CELL_RIGHT = `${HEAD_CELL} text-right`;
 const BODY_CELL = "py-1.5 text-sm text-slate-700";
 const BODY_CELL_RIGHT = `${BODY_CELL} text-right tabular-nums`;
+const SUBTOTAL_CELL = `${BODY_CELL} border-t border-slate-200 font-medium text-slate-900`;
+const SUBTOTAL_CELL_RIGHT = `${BODY_CELL_RIGHT} border-t border-slate-200 font-medium text-slate-900`;
 
 /** Rincian biaya: satu tabel, tiap komponen punya nilai SAR dan IDR. */
 export function CostTable({ result }: CostTableProps) {
@@ -43,6 +47,12 @@ export function CostTable({ result }: CostTableProps) {
       label: "Transport",
       sar: result.transportSAR,
       idr: Math.round(result.transportSAR * result.kurs),
+    },
+    {
+      label: "Total biaya SAR dalam IDR",
+      sar: result.totalSAR,
+      idr: Math.round(result.totalSAR * result.kurs),
+      subtotal: true,
     },
     { label: "Tiket pesawat", sar: null, idr: result.tiketIdr },
   ];
@@ -72,11 +82,15 @@ export function CostTable({ result }: CostTableProps) {
         <tbody className="divide-y divide-slate-100">
           {rows.map((row) => (
             <tr key={row.label}>
-              <td className={BODY_CELL}>{row.label}</td>
-              <td className={BODY_CELL_RIGHT}>
+              <td className={row.subtotal ? SUBTOTAL_CELL : BODY_CELL}>
+                {row.label}
+              </td>
+              <td className={row.subtotal ? SUBTOTAL_CELL_RIGHT : BODY_CELL_RIGHT}>
                 {row.sar === null ? "—" : formatNumber(row.sar)}
               </td>
-              <td className={BODY_CELL_RIGHT}>{formatIdrNumber(row.idr)}</td>
+              <td className={row.subtotal ? SUBTOTAL_CELL_RIGHT : BODY_CELL_RIGHT}>
+                {formatIdrNumber(row.idr)}
+              </td>
             </tr>
           ))}
         </tbody>

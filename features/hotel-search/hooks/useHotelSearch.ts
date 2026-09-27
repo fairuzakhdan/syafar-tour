@@ -19,7 +19,12 @@ const DEFAULT_VALUES: HotelSearchFormValues = {
   roomType: "Quad",
 };
 
-export function useHotelSearch() {
+export interface UseHotelSearchArgs {
+  /** Nilai awal form; dipakai halaman utama mengisi ulang dari history. */
+  initialValues?: Partial<HotelSearchFormValues>;
+}
+
+export function useHotelSearch({ initialValues }: UseHotelSearchArgs = {}) {
   const [status, setStatus] = useState<SearchStatus>("idle");
   const [result, setResult] = useState<HotelSearchPayload | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -27,7 +32,7 @@ export function useHotelSearch() {
 
   const form = useForm<HotelSearchFormValues>({
     resolver: zodResolver(hotelSearchSchema),
-    defaultValues: DEFAULT_VALUES,
+    defaultValues: { ...DEFAULT_VALUES, ...initialValues },
     mode: "onTouched",
   });
 

@@ -15,7 +15,7 @@ export interface HotelCardProps {
 }
 
 export function HotelCard({ item, pax, onSelect }: HotelCardProps) {
-  const { hotel, rooms, nights, baseSAR, taxSAR, totalSAR, perPaxSAR } = item;
+  const { hotel, rooms, nights, baseSAR, totalSAR, perPaxSAR } = item;
 
   return (
     <Card className="flex flex-col p-5 transition hover:border-emerald-300 hover:shadow-md">
@@ -54,10 +54,6 @@ export function HotelCard({ item, pax, onSelect }: HotelCardProps) {
               {rooms} kamar × {nights} malam × {formatSAR(hotel.pricePerRoomPerNight)}
             </dt>
             <dd className="font-medium text-slate-800">{formatSAR(baseSAR)}</dd>
-          </div>
-          <div className="flex justify-between gap-2">
-            <dt>Pajak hotel {hotel.taxPercent}%</dt>
-            <dd className="font-medium text-slate-800">{formatSAR(taxSAR)}</dd>
           </div>
           <div className="flex justify-between gap-2 border-t border-slate-200 pt-1">
             <dt className="font-semibold text-slate-800">Total hotel</dt>

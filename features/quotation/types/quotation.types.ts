@@ -1,7 +1,7 @@
 import type { z } from "zod";
 
 import type { quotationSchema } from "../schemas/quotation.schema";
-import type { Hotel, RoomType, SearchMeta } from "@/types/common.types";
+import type { City, Hotel, RoomType, SearchMeta } from "@/types/common.types";
 
 export type QuotationFormValues = z.infer<typeof quotationSchema>;
 
@@ -47,4 +47,22 @@ export interface QuotationResult {
   costPerPaxIdr: number;
   marginIdr: number;
   sellingPriceIdr: number;
+}
+
+/** Snapshot satu quotation yang disimpan pengguna di browser (localStorage). */
+export interface SavedQuotation {
+  id: string;
+  savedAt: string;
+  hotelId: string;
+  hotelName: string;
+  city: City;
+  checkIn: string;
+  checkOut: string;
+  pax: number;
+  roomType: RoomType;
+  values: QuotationFormValues;
+  summary: {
+    totalCostIdr: number;
+    sellingPriceIdr: number;
+  };
 }

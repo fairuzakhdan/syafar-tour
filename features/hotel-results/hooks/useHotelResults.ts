@@ -26,11 +26,14 @@ export function buildHotelResult(
   nights: number,
   pax: number,
 ): HotelResultItem {
-  const { baseSAR, taxSAR, totalSAR } = calculateHotelCost({
+  // Kartu menampilkan biaya SEBELUM pajak, sesuai contoh pada soal
+  // (2 kamar × 4 malam × 1.500 = 12.000 SAR; per jamaah 1.500 SAR).
+  // Pajak 15% dari data API dihitung opsional di quotation.
+  const { baseSAR, totalSAR } = calculateHotelCost({
     rooms,
     nights,
     pricePerRoomPerNight: toNumber(hotel.pricePerRoomPerNight),
-    taxPercent: toNumber(hotel.taxPercent),
+    taxPercent: 0,
   });
 
   return {
@@ -38,7 +41,6 @@ export function buildHotelResult(
     rooms,
     nights,
     baseSAR,
-    taxSAR,
     totalSAR,
     perPaxSAR: pax > 0 ? totalSAR / pax : 0,
   };

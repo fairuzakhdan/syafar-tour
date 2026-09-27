@@ -1,5 +1,8 @@
 "use client";
 
+import { Save } from "lucide-react";
+
+import { Button } from "@/components/ui/Button";
 import { Drawer } from "@/components/ui/Drawer";
 import { QuotationView } from "./QuotationView";
 import { SellingPrice } from "./summary/SellingPrice";
@@ -12,6 +15,7 @@ export interface QuotationDrawerProps {
   hotel: Hotel | null;
   meta: SearchMeta | null;
   quotation: UseQuotationReturn;
+  onSave: () => void;
 }
 
 export function QuotationDrawer({
@@ -19,6 +23,7 @@ export function QuotationDrawer({
   hotel,
   meta,
   quotation,
+  onSave,
 }: QuotationDrawerProps) {
   const canRender = panel.isOpen && hotel !== null && meta !== null;
   const result = quotation.result;
@@ -30,7 +35,19 @@ export function QuotationDrawer({
       onClose={panel.close}
       title="Quotation"
       description="Estimasi biaya per jamaah"
-      footer={showPrice ? <SellingPrice result={result} /> : null}
+      footer={
+        showPrice ? (
+          <div className="flex items-center justify-between gap-3">
+            <div className="min-w-0 flex-1">
+              <SellingPrice result={result} />
+            </div>
+            <Button onClick={onSave}>
+              <Save className="h-4 w-4" />
+              Simpan
+            </Button>
+          </div>
+        ) : null
+      }
     >
       {canRender && hotel && meta ? (
         <QuotationView hotel={hotel} meta={meta} quotation={quotation} />

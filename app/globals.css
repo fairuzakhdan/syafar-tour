@@ -29,3 +29,23 @@ input[type="number"] {
   -moz-appearance: textfield;
   appearance: textfield;
 }
+
+/* Toast "tersimpan": muncul lalu menghilang sendiri, dihentikan pada prefers-reduced-motion */
+@keyframes toast-out {
+  0% {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  12% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  75% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-4px);
+  }
+}

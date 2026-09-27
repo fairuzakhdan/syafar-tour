@@ -18,6 +18,8 @@ import type { Hotel, SearchMeta } from "@/types/common.types";
 export interface UseQuotationArgs {
   hotel: Hotel | null;
   meta: SearchMeta | null;
+  /** Nilai awal form; dipakai halaman utama mengisi ulang dari history. */
+  initialValues?: Partial<QuotationFormValues>;
 }
 
 /** Satu-satunya sumber nilai awal: dipakai defaultValues form dan fallback kalkulasi. */
@@ -27,7 +29,9 @@ export const QUOTATION_DEFAULTS = {
   transportTotal: DEFAULT_TRANSPORT_TOTAL,
   tiketPerPax: DEFAULT_TIKET_PER_PAX,
   marginPerPax: DEFAULT_MARGIN_PER_PAX,
-  applyHotelTax: true,
+  // Default OFF agar hasil persis contoh di soal (12.000 → 18.000 SAR).
+  // Checkbox di form menyalakan pajak 15% dari data API (butir technical test 13).
+  applyHotelTax: false,
 } satisfies QuotationFormValues;
 
 /** Nilai user menang; field yang undefined tidak menimpa default. */
@@ -39,10 +43,10 @@ function withDefaults(values: Partial<QuotationFormValues>): QuotationFormValues
   return { ...QUOTATION_DEFAULTS, ...defined };
 }
 
-export function useQuotation({ hotel, meta }: UseQuotationArgs) {
+export function useQuotation({ hotel, meta, initialValues }: UseQuotationArgs) {
   const form = useForm<QuotationFormValues>({
     resolver: zodResolver(quotationSchema),
-    defaultValues: QUOTATION_DEFAULTS,
+    defaultValues: { ...QUOTATION_DEFAULTS, ...initialValues },
     mode: "onChange",
   });
 
