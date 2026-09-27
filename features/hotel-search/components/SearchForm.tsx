@@ -4,7 +4,10 @@ import { Search } from "lucide-react";
 import { FormProvider } from "react-hook-form";
 
 import { Button } from "@/components/ui/Button";
-import { ROOM_TYPES } from "@/lib/constants";
+import {
+  calculateRooms,
+  getRoomCapacity,
+} from "@/features/quotation/actions/calculate-rooms";
 import { SearchFilters } from "./SearchFilters";
 import type { UseHotelSearchReturn } from "../hooks/useHotelSearch";
 
@@ -18,8 +21,8 @@ export function SearchForm({ search, onSubmit }: SearchFormProps) {
 
   const pax = form.watch("pax");
   const roomType = form.watch("roomType");
-  const capacity = ROOM_TYPES[roomType] ?? 1;
-  const rooms = Number.isFinite(pax) && pax > 0 ? Math.ceil(pax / capacity) : 0;
+  const capacity = getRoomCapacity(roomType);
+  const rooms = calculateRooms(pax, roomType);
 
   return (
     <FormProvider {...form}>

@@ -1,3 +1,4 @@
+import { calculateHotelCost } from "./calculate-hotel-cost";
 import { calculateNights } from "./calculate-nights";
 import { calculateRooms } from "./calculate-rooms";
 import type { QuotationInput, QuotationResult } from "../types/quotation.types";
@@ -77,14 +78,6 @@ function validateQuotation(values: NormalizedInput): string[] {
   return issues;
 }
 
-/** Hotel: kamar × malam × rate, ditambah pajak dari data API. */
-function calculateHotelCost(values: NormalizedInput) {
-  const baseSAR = values.rooms * values.nights * values.pricePerRoomPerNight;
-  const taxSAR = baseSAR * (values.taxPercent / 100);
-
-  return { baseSAR, taxSAR, totalSAR: baseSAR + taxSAR };
-}
-
 /** Total dalam SAR: hotel + visa + transport. */
 function calculateTotalSAR(values: NormalizedInput, hotelTotalSAR: number) {
   const visaSAR = values.pax * values.visaPerPax;
@@ -122,7 +115,12 @@ export function calculateQuotation(input: QuotationInput): QuotationResult {
   const values = normalizeInput(input);
 
   const issues = validateQuotation(values);
-  const hotel = calculateHotelCost(values);
+  const hotel = calculateHotelCost({
+    rooms: values.rooms,
+    nights: values.nights,
+    pricePerRoomPerNight: values.pricePerRoomPerNight,
+    taxPercent: values.taxPercent,
+  });
   const sar = calculateTotalSAR(values, hotel.totalSAR);
   const idr = calculateIDR(values, sar.totalSAR);
 

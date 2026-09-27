@@ -4,6 +4,7 @@ import { useMemo, useState } from "react";
 
 import { calculateRooms } from "@/features/quotation/actions/calculate-rooms";
 import { calculateNights } from "@/features/quotation/actions/calculate-nights";
+import { calculateHotelCost } from "@/features/quotation/actions/calculate-hotel-cost";
 import { applyResultsFilter, isFilterActive } from "../actions/sort-hotels";
 import type {
   HotelResultItem,
@@ -25,10 +26,12 @@ export function buildHotelResult(
   nights: number,
   pax: number,
 ): HotelResultItem {
-  const price = toNumber(hotel.pricePerRoomPerNight);
-  const baseSAR = rooms * nights * price;
-  const taxSAR = baseSAR * (toNumber(hotel.taxPercent) / 100);
-  const totalSAR = baseSAR + taxSAR;
+  const { baseSAR, taxSAR, totalSAR } = calculateHotelCost({
+    rooms,
+    nights,
+    pricePerRoomPerNight: toNumber(hotel.pricePerRoomPerNight),
+    taxPercent: toNumber(hotel.taxPercent),
+  });
 
   return {
     hotel,

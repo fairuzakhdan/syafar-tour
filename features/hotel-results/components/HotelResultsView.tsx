@@ -37,13 +37,8 @@ export function HotelResultsView({
 
       <HotelResultsHeader
         title={`Hotel ${meta.city}`}
-        count={results.items.length}
-        totalCount={results.totalHotels}
-        filter={results.filter}
-        filtered={results.filtered}
         loading={status === "loading"}
-        onChange={results.updateFilter}
-        onReset={results.resetFilter}
+        results={results}
       />
 
       {status === "loading" ? (

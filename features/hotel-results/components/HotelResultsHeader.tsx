@@ -3,7 +3,8 @@
 import { InputTextLabel } from "@/components/ui/field/InputTextLabel";
 import { Select } from "@/components/ui/field/Select";
 import { Button } from "@/components/ui/Button";
-import type { ResultsFilter, SortOption } from "../types/hotel-results.types";
+import type { UseHotelResultsReturn } from "../hooks/useHotelResults";
+import type { SortOption } from "../types/hotel-results.types";
 
 const SORT_OPTIONS: { value: SortOption; label: string }[] = [
   { value: "default", label: "Urutan asli" },
@@ -14,26 +15,19 @@ const SORT_OPTIONS: { value: SortOption; label: string }[] = [
 
 export interface HotelResultsHeaderProps {
   title: string;
-  count: number;
-  totalCount: number;
-  filter: ResultsFilter;
-  filtered: boolean;
   /** Saat true, hitungan diganti indikator memuat (data masih basi). */
-  loading?: boolean;
-  onChange: (patch: Partial<ResultsFilter>) => void;
-  onReset: () => void;
+  loading: boolean;
+  results: UseHotelResultsReturn;
 }
 
 export function HotelResultsHeader({
   title,
-  count,
-  totalCount,
-  filter,
-  filtered,
-  loading = false,
-  onChange,
-  onReset,
+  loading,
+  results,
 }: HotelResultsHeaderProps) {
+  const { filter, filtered, totalHotels, updateFilter, resetFilter } = results;
+  const count = results.items.length;
+
   return (
     <div className="mb-4 flex flex-col gap-4">
       <div className="flex flex-wrap items-center justify-between gap-2">
@@ -46,14 +40,14 @@ export function HotelResultsHeader({
               <>
                 Menampilkan{" "}
                 <span className="font-semibold text-slate-700">{count}</span>{" "}
-                dari {totalCount} hotel
+                dari {totalHotels} hotel
               </>
             )}
           </p>
         </div>
 
         {filtered ? (
-          <Button variant="ghost" size="sm" onClick={onReset}>
+          <Button variant="ghost" size="sm" onClick={resetFilter}>
             Reset filter
           </Button>
         ) : null}
@@ -64,7 +58,7 @@ export function HotelResultsHeader({
           label="Cari nama hotel"
           placeholder="Contoh: Fairmont"
           value={filter.query}
-          onChange={(event) => onChange({ query: event.target.value })}
+          onChange={(event) => updateFilter({ query: event.target.value })}
         />
 
         <InputTextLabel
@@ -74,7 +68,7 @@ export function HotelResultsHeader({
           min={0}
           placeholder="0"
           value={filter.minPrice}
-          onChange={(event) => onChange({ minPrice: event.target.value })}
+          onChange={(event) => updateFilter({ minPrice: event.target.value })}
         />
 
         <InputTextLabel
@@ -84,14 +78,14 @@ export function HotelResultsHeader({
           min={0}
           placeholder="1500"
           value={filter.maxPrice}
-          onChange={(event) => onChange({ maxPrice: event.target.value })}
+          onChange={(event) => updateFilter({ maxPrice: event.target.value })}
         />
 
         <Select
           label="Urutkan"
           options={SORT_OPTIONS}
           value={filter.sort}
-          onChange={(event) => onChange({ sort: event.target.value as SortOption })}
+          onChange={(event) => updateFilter({ sort: event.target.value as SortOption })}
         />
       </div>
     </div>
