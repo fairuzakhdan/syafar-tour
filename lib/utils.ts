@@ -8,10 +8,6 @@ export function toNumber(value: unknown, fallback = 0): number {
   return Number.isFinite(n) ? n : fallback;
 }
 
-export function isPositiveNumber(value: unknown): boolean {
-  return Number.isFinite(Number(value)) && Number(value) > 0;
-}
-
 const sarFormatter = new Intl.NumberFormat("id-ID", {
   maximumFractionDigits: 2,
 });
@@ -58,8 +54,4 @@ export function getNights(checkIn: string, checkOut: string): number {
   const diff = end - start;
   if (diff <= 0) return 0;
   return Math.round(diff / 86_400_000);
-}
-
-export function toISODate(date: Date): string {
-  return date.toISOString().slice(0, 10);
 }

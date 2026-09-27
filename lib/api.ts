@@ -2,7 +2,6 @@ import type {
   ApiResponse,
   ApiSuccess,
   City,
-  HotelSearchPayload,
   RoomType,
 } from "@/types/common.types";
 
@@ -69,5 +68,3 @@ export async function getJson<T>(
 
   return body;
 }
-
-export type HotelSearchResponse = ApiResponse<HotelSearchPayload>;
