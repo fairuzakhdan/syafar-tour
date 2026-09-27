@@ -13,6 +13,8 @@ export interface DrawerProps {
   description?: string;
   children: ReactNode;
   footer?: ReactNode;
+  /** Notifikasi yang melayang tepat di atas footer (mis. "tersimpan"). */
+  notice?: ReactNode;
 }
 
 /**
@@ -26,6 +28,7 @@ export function Drawer({
   description,
   children,
   footer,
+  notice,
 }: DrawerProps) {
   useLockBodyScroll(open);
   useEscapeKey(onClose, open);
@@ -73,7 +76,12 @@ export function Drawer({
         <div className="flex-1 overflow-y-auto px-5 py-5">{children}</div>
 
         {footer ? (
-          <footer className="shrink-0 border-t border-slate-200 bg-white px-5 py-4">
+          <footer className="relative shrink-0 border-t border-slate-200 bg-white px-5 py-4">
+            {notice ? (
+              <div className="pointer-events-none absolute inset-x-0 bottom-full px-5 pb-3">
+                {notice}
+              </div>
+            ) : null}
             {footer}
           </footer>
         ) : null}

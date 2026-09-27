@@ -1,6 +1,6 @@
 import { Container } from "@/components/layout/Container";
 import { Skeleton } from "@/components/ui/Skeleton";
-import { ResultsLoadingState } from "@/features/hotel-results/components/ResultsLoadingState";
+import { ResultsLoadingState } from "@/features/dashboard/components/results/ResultsLoadingState";
 
 export default function Loading() {
   return (

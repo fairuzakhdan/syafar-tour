@@ -1,21 +1,11 @@
 "use client";
 
-import { useRouter } from "next/navigation";
-
 import { Container } from "@/components/layout/Container";
-import { SavedQuotationList } from "@/features/quotation/components/SavedQuotationList";
-import { useSavedQuotations } from "@/features/quotation/hooks/useSavedQuotations";
-import { stashPendingQuotation } from "@/features/quotation/lib/saved-quotations";
-import type { SavedQuotation } from "@/features/quotation/types/quotation.types";
+import { SavedQuotationList } from "@/features/history/components/SavedQuotationList";
+import { useHistoryPage } from "@/features/history/hooks/useHistoryPage";
 
 export default function HistoryPage() {
-  const router = useRouter();
-  const { items, remove } = useSavedQuotations();
-
-  const handleLoad = (item: SavedQuotation) => {
-    stashPendingQuotation(item);
-    router.push("/");
-  };
+  const history = useHistoryPage();
 
   return (
     <div className="py-6 sm:py-8">
@@ -28,7 +18,11 @@ export default function HistoryPage() {
           </p>
         </header>
 
-        <SavedQuotationList items={items} onLoad={handleLoad} onRemove={remove} />
+        <SavedQuotationList
+          items={history.items}
+          onLoad={history.handleLoad}
+          onRemove={history.handleRemove}
+        />
       </Container>
     </div>
   );
